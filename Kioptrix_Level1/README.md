@@ -1,16 +1,3 @@
----
-title: Kioptrix Level 1 - Vulnhub VM Challenge
-author: 47Suriya
-author_url: https://twitter.com/_47Suriya_
-categories: 
- - Vulnhub
-tags:
- - Vulnhub
- - Write up
- - Kioptrix Level 1
- - Kioptrix 
- - VM Challenge
----
 
 ---
 # Kioptrix Level 1 - Vulnhub VM Challenge
