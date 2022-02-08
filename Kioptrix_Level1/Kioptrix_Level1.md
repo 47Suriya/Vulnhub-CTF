@@ -20,7 +20,7 @@ This Kioptrix VM Image are easy challenges. The object of the game is to acquire
 <br>
 
 
-![0.png](Kioptrix_Level1\0.png)
+![0.png](0.png)
 
 ## Finding the IP of the Target Machine
 
