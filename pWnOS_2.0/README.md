@@ -184,6 +184,8 @@ DOWNLOADED: 9224 - FOUND: 30
 
 Here, we can find that there is a directory named **blog** and also some other directories.
 
+## Exploit 
+
 When we navigate to the directory,
 
 ![blog](images/4.png)
