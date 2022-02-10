@@ -12,6 +12,14 @@ pWnOS v2.0 is a Virutal Machine Image which hosts a server to pratice penetratio
 **Configuration & Setup:** <br>
 Configure your attacking platform to be within the **10.10.10.0/24** network range. <br>
 
+The ip of the attacking machine can be set within the specified range using the commandsd below:
+
+```bash
+sudo ifconfig eth0 <your-ip> down
+```
+```bash
+sudo ifconfig eth0 10.10.10.101 up
+```
 **Server's Network Settings:** <br>
 
 **IP:** 10.10.10.100
@@ -42,10 +50,112 @@ When we go to the webpage hosted on port 80
 
 Now [Dirb](https://github.com/v0re/dirb) web content scanner is used to find some information about some hidden directories
 
-![dirb](images/2.png)
-<br>
+```bash
+┌──(kali㉿kali)-[~]
+└─$ dirb http://10.10.10.100/           
 
-![dirb](images/3.png)
+-----------------
+DIRB v2.22    
+By The Dark Raver
+-----------------
+
+START_TIME: Sat Jun 26 16:11:23 2021
+URL_BASE: http://10.10.10.100/
+WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
+
+-----------------
+
+GENERATED WORDS: 4612                                                          
+
+---- Scanning URL: http://10.10.10.100/ ----
++ http://10.10.10.100/activate (CODE:302|SIZE:0)                                                                                              
+==> DIRECTORY: http://10.10.10.100/blog/                                                                                                      
++ http://10.10.10.100/cgi-bin/ (CODE:403|SIZE:288)                                                                                            
+==> DIRECTORY: http://10.10.10.100/includes/                                                                                                  
++ http://10.10.10.100/index (CODE:200|SIZE:854)                                                                                               
++ http://10.10.10.100/index.php (CODE:200|SIZE:854)                                                                                           
++ http://10.10.10.100/info (CODE:200|SIZE:50175)                                                                                              
++ http://10.10.10.100/info.php (CODE:200|SIZE:50044)                                                                                          
++ http://10.10.10.100/login (CODE:200|SIZE:1174)                                                                                              
++ http://10.10.10.100/register (CODE:200|SIZE:1562)                                                                                           
++ http://10.10.10.100/server-status (CODE:403|SIZE:293)                                                                                       
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/ ----
++ http://10.10.10.100/blog/add (CODE:302|SIZE:0)                                                                                              
++ http://10.10.10.100/blog/atom (CODE:200|SIZE:1062)                                                                                          
++ http://10.10.10.100/blog/categories (CODE:302|SIZE:0)                                                                                       
++ http://10.10.10.100/blog/comments (CODE:302|SIZE:0)                                                                                         
+==> DIRECTORY: http://10.10.10.100/blog/config/                                                                                               
++ http://10.10.10.100/blog/contact (CODE:200|SIZE:5898)                                                                                       
+==> DIRECTORY: http://10.10.10.100/blog/content/                                                                                              
++ http://10.10.10.100/blog/delete (CODE:302|SIZE:0)                                                                                           
+==> DIRECTORY: http://10.10.10.100/blog/docs/                                                                                                 
+==> DIRECTORY: http://10.10.10.100/blog/flash/                                                                                                
+==> DIRECTORY: http://10.10.10.100/blog/images/                                                                                               
++ http://10.10.10.100/blog/index (CODE:200|SIZE:8094)                                                                                         
++ http://10.10.10.100/blog/index.php (CODE:200|SIZE:8094)                                                                                     
++ http://10.10.10.100/blog/info (CODE:302|SIZE:0)                                                                                             
++ http://10.10.10.100/blog/info.php (CODE:302|SIZE:0)                                                                                         
+==> DIRECTORY: http://10.10.10.100/blog/interface/                                                                                            
+==> DIRECTORY: http://10.10.10.100/blog/languages/                                                                                            
++ http://10.10.10.100/blog/login (CODE:200|SIZE:5647)                                                                                         
++ http://10.10.10.100/blog/logout (CODE:302|SIZE:0)                                                                                           
++ http://10.10.10.100/blog/options (CODE:302|SIZE:0)                                                                                          
++ http://10.10.10.100/blog/rdf (CODE:200|SIZE:1411)                                                                                           
++ http://10.10.10.100/blog/rss (CODE:200|SIZE:1237)                                                                                           
+==> DIRECTORY: http://10.10.10.100/blog/scripts/                                                                                              
++ http://10.10.10.100/blog/search (CODE:200|SIZE:4931)                                                                                        
++ http://10.10.10.100/blog/setup (CODE:302|SIZE:0)                                                                                            
++ http://10.10.10.100/blog/static (CODE:302|SIZE:0)                                                                                           
++ http://10.10.10.100/blog/stats (CODE:200|SIZE:5289)                                                                                         
+==> DIRECTORY: http://10.10.10.100/blog/themes/                                                                                               
++ http://10.10.10.100/blog/trackback (CODE:302|SIZE:0)                                                                                        
++ http://10.10.10.100/blog/upgrade (CODE:302|SIZE:0)                                                                                          
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/includes/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/config/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/content/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/docs/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/flash/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/images/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/interface/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/languages/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/scripts/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                                                                                              
+---- Entering directory: http://10.10.10.100/blog/themes/ ----
+(!) WARNING: Directory IS LISTABLE. No need to scan it.                        
+    (Use mode '-w' if you want to scan it anyway)
+                                                                               
+-----------------
+END_TIME: Sat Jun 26 16:11:35 2021
+DOWNLOADED: 9224 - FOUND: 30
+```
 
 Here, we can find that there is a directory named **blog** and also some other directories.
 
